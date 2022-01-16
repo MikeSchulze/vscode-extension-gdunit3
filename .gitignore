@@ -1,0 +1,19 @@
+# Project-specific ignores
+.history
+out/
+node_modules/
+
+# System/tool-specific ignores
+.directory
+*~
+.DS_Store
+.vscode/
+
+# temporary generated files
+GdUnitRunner.cfg
+reports/
+
+.fake
+.ionide
+.mono
+*.vsix

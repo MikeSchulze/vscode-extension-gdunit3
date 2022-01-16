@@ -1,0 +1,286 @@
+{
+	"name": "gdunit3",
+	"displayName": "Godot GdUnit Test Explorer",
+	"description": "Test Explorer for GdUnit3",
+	"version": "1.0.0",
+	"publisher": "mikeschulze",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/MikeSchulze/vscode-extension-gdunit3.git"
+	},
+	"icon": "resources/gdUnit.png",
+	"engines": {
+		"vscode": "^1.63.0"
+	},
+	"categories": [
+		"Testing"
+	],
+	"keywords": [
+		"GdUnit3",
+		"Godot",
+		"C#"
+	],
+	"activationEvents": [
+		"workspaceContains:**/project.godot",
+		"workspaceContains:**/addons/gdUnit3/plugin.gd",
+		"onLanguage:csharp",
+		"onStartupFinished"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"markdown.markdownItPlugins": true,
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "gdunit-explorer",
+					"title": "GdUnit Test Explorer",
+					"icon": "resources/gdUnit.svg"
+				}
+			]
+		},
+		"views": {
+			"gdunit-explorer": [
+				{
+					"id": "gdUnit3TestExplorer",
+					"name": "GdUnit Test Explorer"
+				},
+				{
+					"id": "gdUnitTestReports",
+					"name": "GdUnit Test Reports",
+					"type": "webview"
+				}
+			]
+		},
+		"viewsWelcome_": [
+			{
+				"view": "gdUnit3TestExplorer",
+				"contents": "No tests found. \n\nPlease open the test project and ensure your project compiles.\nIf the directory to execute dotnet test in is not the workspace root, consider setting cmd-gdUnit3.projectPath appropriately.\n[Open settings](command:workbench.action.openWorkspaceSettingsFile)"
+			}
+		],
+		"commands": [
+			{
+				"command": "cmd-gdUnit3.help",
+				"title": "GdUnit Help",
+				"icon": {
+					"light": "resources/toolbar/help_search.svg",
+					"dark": "resources/toolbar/help_search.svg"
+				}
+			},
+			{
+				"command": "cmd-gdUnit3.settings",
+				"title": "GdUnit Settings",
+				"icon": {
+					"light": "resources/toolbar/tools.svg",
+					"dark": "resources/toolbar/tools.svg"
+				}
+			},
+			{
+				"command": "cmd-gdUnit3.reRun",
+				"title": "Rerun Tests",
+				"enablement": "cmd-gdUnit3:is-running != true",
+				"icon": {
+					"light": "resources/toolbar/play.svg",
+					"dark": "resources/toolbar/play.svg"
+				}
+			},
+			{
+				"command": "cmd-gdUnit3.reRunDebug",
+				"title": "Rerun Tests (Debug)",
+				"enablement": "cmd-gdUnit3:is-running != true",
+				"icon": {
+					"light": "resources/toolbar/play_debug.svg",
+					"dark": "resources//toolbar/play_debug.svg"
+				}
+			},
+			{
+				"command": "cmd-gdUnit3.stop",
+				"title": "Stops running Tests",
+				"enablement": "cmd-gdUnit3:is-running == true",
+				"icon": {
+					"light": "resources/toolbar/stop.svg",
+					"dark": "resources//toolbar/stop.svg"
+				}
+			},
+			{
+				"command": "cmd-gdUnit3.document.run",
+				"title": "Run GdUnit Test",
+				"icon": {
+					"light": "resources/gdUnit.svg",
+					"dark": "resources/gdUnit.svg"
+				}
+			},
+			{
+				"command": "cmd-gdUnit3.document.runAll",
+				"title": "Run All GdUnit Test",
+				"icon": {
+					"light": "resources/gdUnit.svg",
+					"dark": "resources/gdUnit.svg"
+				}
+			},
+			{
+				"command": "cmd-gdUnit3.document.debug",
+				"title": "Debug GdUnit Test",
+				"icon": {
+					"light": "resources/gdUnit.svg",
+					"dark": "resources/gdUnit.svg"
+				}
+			},
+			{
+				"command": "cmd-gdUnit3.document.debugAll",
+				"title": "Debug All GdUnit Test",
+				"icon": {
+					"light": "resources/gdUnit.svg",
+					"dark": "resources/gdUnit.svg"
+				}
+			},
+			{
+				"command": "cmd-gdUnit3.explorer.run",
+				"title": "Run GdUnit Test",
+				"icon": {
+					"light": "resources/gdUnit.svg",
+					"dark": "resources/gdUnit.svg"
+				}
+			},
+			{
+				"command": "cmd-gdUnit3.explorer.debug",
+				"title": "Debug GdUnit Test",
+				"icon": {
+					"light": "resources/gdUnit.svg",
+					"dark": "resources/gdUnit.svg"
+				}
+			}
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "cmd-gdUnit3.help",
+					"when": "view == gdUnit3TestExplorer",
+					"group": "navigation"
+				},
+				{
+					"command": "cmd-gdUnit3.settings",
+					"when": "view == gdUnit3TestExplorer",
+					"group": "navigation"
+				},
+				{
+					"command": "cmd-gdUnit3.reRun",
+					"when": "view == gdUnit3TestExplorer",
+					"group": "navigation"
+				},
+				{
+					"command": "cmd-gdUnit3.reRunDebug",
+					"when": "view == gdUnit3TestExplorer",
+					"group": "navigation"
+				},
+				{
+					"command": "cmd-gdUnit3.stop",
+					"when": "view == gdUnit3TestExplorer",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "cmd-gdUnit3.document.run",
+					"when": "view == gdUnit3TestExplorer",
+					"icon": "resources/gdUnit.svg"
+				}
+			],
+			"editor/context": [
+				{
+					"command": "cmd-gdUnit3.document.run",
+					"group": "cmd-gdUnit3@1",
+					"when": "resourceLangId == csharp && cmd-gdUnit3:is-ready == true"
+				},
+				{
+					"command": "cmd-gdUnit3.document.debug",
+					"group": "cmd-gdUnit3@2",
+					"when": "resourceLangId == csharp && cmd-gdUnit3:is-ready == true"
+				},
+				{
+					"command": "cmd-gdUnit3.document.runAll",
+					"group": "cmd-gdUnit3@3",
+					"when": "resourceLangId == csharp && cmd-gdUnit3:is-ready == true"
+				},
+				{
+					"command": "cmd-gdUnit3.document.debugAll",
+					"group": "cmd-gdUnit3@4",
+					"when": "resourceLangId == csharp && cmd-gdUnit3:is-ready == true"
+				}
+			],
+			"explorer/context": [
+				{
+					"command": "cmd-gdUnit3.explorer.run",
+					"group": "cmd-gdUnit3@1",
+					"when": "cmd-gdUnit3:is-ready == true"
+				},
+				{
+					"command": "cmd-gdUnit3.explorer.debug",
+					"group": "cmd-gdUnit3@1",
+					"when": "cmd-gdUnit3:is-ready == true"
+				}
+			]
+		},
+		"configuration": {
+			"title": "GdUnit3",
+			"properties": {
+				"gdunit3.godotExecutable": {
+					"description": "The path to the Godot executable. Both relative and absolute paths are accepted",
+					"type": "string",
+					"default": ""
+				},
+				"gdunit3.server.port": {
+					"description": "The GdUnit server port to comunicate with the test runner client.",
+					"type": "integer",
+					"default": 31020
+				},
+				"gdunit3.debuger.port": {
+					"description": "The c# debuger port (23685)",
+					"type": "integer",
+					"default": 23685,
+					"port": 23685
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"dependencies": {
+		"class-transformer": "^0.5.1",
+		"json5": "^2.2.0",
+		"jsonc-parser": "^3.0.0",
+		"promise-socket": "^6.0.3",
+		"uuid": "^8.3.2",
+		"vscode-debugprotocol": "^1.42.0",
+		"vscode-nls": "^5.0.0"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.4",
+		"@types/mocha": "^9.0.0",
+		"@types/node": "^17.0.15",
+		"@types/uuid": "^8.3.4",
+		"@types/vscode": "^1.63.0",
+		"@typescript-eslint/eslint-plugin": "^5.1.0",
+		"@typescript-eslint/parser": "^5.1.0",
+		"@vscode/test-electron": "^1.6.2",
+		"eslint": "^8.1.0",
+		"glob": "^7.1.7",
+		"mocha": "^9.1.3",
+		"typescript": "^4.4.4"
+	},
+	"extensionDependencies": [
+		"ms-dotnettools.csharp",
+		"ms-vscode.mono-debug"
+	],
+	"breakpoints": [
+		{
+			"language": "csharp"
+		}
+	]
+}
