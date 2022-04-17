@@ -45,5 +45,5 @@ The extension is current in beta version and is not featue complete.
 
 ### You are welcome to:
   * [Give Feedback](https://github.com/MikeSchulze/gdUnit3/discussions/228)
-  * [Suggest Improvements](https://github.com/MikeSchulze/gdUnit3/issues/new?assignees=MikeSchulze&labels=enhancement&template=feature_request.md&title=)
-  * [Report Bugs](https://github.com/MikeSchulze/gdUnit3/issues/new?assignees=MikeSchulze&labels=bug&template=bug_report.md&title=)
+  * [Suggest Improvements](https://github.com/MikeSchulze/vscode-extension-gdunit3/issues/new?assignees=MikeSchulze&labels=enhancement&template=feature_request.md&title=)
+  * [Report Bugs](https://github.com/MikeSchulze/vscode-extension-gdunit3/issues/new?assignees=MikeSchulze&labels=bug&template=bug_report.md&title=)
