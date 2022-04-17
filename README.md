@@ -37,7 +37,8 @@ Property                                       | Description
 ## Requirements
 * C#
 * VS Code Mono Debug
-* Installed Godot-Mono 3.3.x 
+* Installed Godot-Mono 3.3.x
+  * Installed GdUnit3 v2.0.0 plugin
 
 ## Known Issues
 
