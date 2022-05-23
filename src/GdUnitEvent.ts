@@ -7,7 +7,7 @@ export enum EVENT_TYPE {
     TESTSUITE_AFTER,
     TESTCASE_BEFORE,
     TESTCASE_AFTER
-};
+}
 
 export class GdUnitReport {
     constructor(
@@ -33,9 +33,9 @@ export class GdUnitEvent implements Disposable {
 
     constructor(
         public readonly type: EVENT_TYPE,
-        public readonly resource_path: String,
-        public readonly suite_name: String,
-        public readonly test_name: String,
+        public readonly resource_path: string,
+        public readonly suite_name: string,
+        public readonly test_name: string,
         public readonly total_count: number = 0,
         public readonly statistics: {
             elapsed_time: number,
@@ -80,5 +80,6 @@ export class GdUnitEvent implements Disposable {
     }
 
     dispose() {
+        this.dispose();
     }
 }

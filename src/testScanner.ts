@@ -15,14 +15,14 @@ export class TestScanner implements Disposable {
                 return [];
             }
 
-            var clazzSymbols = symbol[0]?.children;
-            var methods = clazzSymbols[0]?.children;
-            var isClass = clazzSymbols[0]?.kind == SymbolKind.Class;
+            const clazzSymbols = symbol[0]?.children;
+            const methods = clazzSymbols[0]?.children;
+            const isClass = clazzSymbols[0]?.kind == SymbolKind.Class;
             if (!isClass) {
                 return [];
             }
 
-            var start = clazzSymbols[0]?.range.start;
+            const start = clazzSymbols[0]?.range.start;
             if (!document.lineAt(start)?.text.includes("[TestSuite")) {
                 console.debug(`exclude ${document.fileName}, is not a testsuite`);
                 return [];
@@ -30,7 +30,7 @@ export class TestScanner implements Disposable {
             return methods
                 .filter(entry => entry.kind == SymbolKind.Method)
                 .filter(entry => {
-                    var start = entry.range.start;
+                    const start = entry.range.start;
                     return document.lineAt(start)?.text.includes("[TestCase");
                 });
         }).then(undefined, err => {
@@ -40,7 +40,7 @@ export class TestScanner implements Disposable {
     }
 
     private findTestCaseOnSelection(symbls: DocumentSymbol[], position: Position): Promise<string> {
-        var index = symbls.findIndex(symbol => symbol.range.intersection(new Range(position, position)))
+        const index = symbls.findIndex(symbol => symbol.range.intersection(new Range(position, position)))
         if (index == -1) {
             return Promise.reject();
         }
@@ -86,6 +86,7 @@ export class TestScanner implements Disposable {
         return config;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     dispose() {
     }
 }

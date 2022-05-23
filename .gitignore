@@ -8,6 +8,7 @@ node_modules/
 *~
 .DS_Store
 .vscode/
+.vscode-test/
 
 # temporary generated files
 GdUnitRunner.cfg

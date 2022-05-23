@@ -1,4 +1,4 @@
-import { Diagnostic, Disposable } from "vscode";
+import { Disposable } from "vscode";
 
 export class TestCase implements Disposable {
 
@@ -8,6 +8,7 @@ export class TestCase implements Disposable {
         public readonly line_number: number) {
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     dispose() {
     }
 }

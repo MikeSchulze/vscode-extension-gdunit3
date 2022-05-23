@@ -5,6 +5,7 @@ class ReportViewProvider implements WebviewViewProvider {
 
     private _view?: WebviewView;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public resolveWebviewView(webviewView: WebviewView, context: WebviewViewResolveContext, token: CancellationToken) {
         this._view = webviewView;
         webviewView.webview.options = {
@@ -16,7 +17,7 @@ class ReportViewProvider implements WebviewViewProvider {
         webviewView.show(true);
     }
 
-    public updateText(text: String) {
+    public updateText(text: string) {
         if (this._view != null)
             this._view.webview.html = `<!DOCTYPE html>
             <html lang="en">
@@ -40,9 +41,9 @@ export class ReportView implements Disposable {
     private readonly lineEndTagReplace = '<br>';
     private readonly spaceTag = / {2,}/gm;
     private readonly spaceTagReplace = '&nbsp;';
-    private readonly bracketOpenTag = /[\<]/gm;
+    private readonly bracketOpenTag = /[\\<]/gm;
     private readonly bracketOpenReplace = '&lt;';
-    private readonly bracketCloseTag = /[\>]/gm;
+    private readonly bracketCloseTag = /[\\>]/gm;
     private readonly bracketCloseReplace = '&gt;';
 
     private _provider: ReportViewProvider;
@@ -87,6 +88,7 @@ export class ReportView implements Disposable {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     dispose() {
     }
 }

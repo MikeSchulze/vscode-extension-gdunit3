@@ -39,8 +39,8 @@ export class TreeProvider extends EventListener implements TreeDataProvider<Tree
         return Promise.resolve(element.children);
     }
 
-    public listen(data: any): void {
-        if (data._type === 'GdUnitEvent') {
+    public listen(data: GdUnitEvent | TestSuite | string): void {
+        if (data instanceof GdUnitEvent) {
             this.onGdUnitEvent(data as GdUnitEvent);
         } else if (data instanceof TestSuite) {
             this.onAddTestSuite(data);
@@ -61,13 +61,13 @@ export class TreeProvider extends EventListener implements TreeDataProvider<Tree
         this._onDidChangeSelection.fire(node);
     }
 
-    private findTestCase(resourcePath: String, name: String): TreeNodeTestCase | undefined {
+    private findTestCase(resourcePath: string, name: string): TreeNodeTestCase | undefined {
         return this._nodes
             .find(node => node.resourcPath === resourcePath)?.children
             .find(node => node.label === name) as TreeNodeTestCase;
     }
 
-    private findTestSuite(resourcePath: String): TreeNodeTestSuite | undefined {
+    private findTestSuite(resourcePath: string): TreeNodeTestSuite | undefined {
         return this._nodes
             .find(node => node.resourcPath === resourcePath) as TreeNodeTestSuite;
     }
@@ -79,10 +79,10 @@ export class TreeProvider extends EventListener implements TreeDataProvider<Tree
     }
 
     private abortRunning(): void {
-        let testSuite = this._nodes.find(node => node.status == STATE.RUNNING);
+        const testSuite = this._nodes.find(node => node.status == STATE.RUNNING);
         if (testSuite) {
             testSuite.setStateArborted();
-            let node = testSuite.children.find(node => node.status == STATE.RUNNING);
+            const node = testSuite.children.find(node => node.status == STATE.RUNNING);
             if (node) {
                 node.setStateArborted();
                 this.fireUpdateNode(node);
@@ -92,7 +92,7 @@ export class TreeProvider extends EventListener implements TreeDataProvider<Tree
     }
 
     private updateTestSuite(event: GdUnitEvent): void {
-        var node = this.findTestSuite(event.resource_path);
+        const node = this.findTestSuite(event.resource_path);
         if (node === undefined) {
             return;
         }
@@ -107,7 +107,7 @@ export class TreeProvider extends EventListener implements TreeDataProvider<Tree
     }
 
     private updateTestCase(event: GdUnitEvent): void {
-        var node = this.findTestCase(event.resource_path, event.test_name);
+        const node = this.findTestCase(event.resource_path, event.test_name);
         if (node === undefined) {
             return;
         }
@@ -167,9 +167,11 @@ export class TreeProvider extends EventListener implements TreeDataProvider<Tree
         window.withProgress({
             location: { viewId: 'gdUnit3TestExplorer' }
             //location: vscode.ProgressLocation.Notification
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         }, (progress, token) => {
             let counter = 0;
             let interval: NodeJS.Timeout;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             return new Promise((resolve, reject) => {
                 interval = setInterval(() => {
                     progress.report({ message: `Run test ${counter}:100`, increment: 1 });

@@ -3,8 +3,7 @@ import {
     Uri
 } from 'vscode';
 import { GdUnitSettings } from './gdUnitSettings';
-
-let fs = require('fs');
+import fs = require('fs');
 
 export class TestRunnerConfiguration {
     readonly CONFIG_VERSION = '2.0';
@@ -33,15 +32,15 @@ export class TestRunnerConfiguration {
     }
 
     private toGodotResourcePath(folder: Uri, resourcePath: string): string {
-        var base = resourcePath.replace(folder.fsPath + "\\", "res://");
+        const base = resourcePath.replace(folder.fsPath + "\\", "res://");
         return base.split(path.sep).join(path.posix.sep);
     }
 
     private toJson(folder: Uri): string {
-        var included = Array.from(this._included.entries())
+        const included = Array.from(this._included.entries())
             .reduce((acc, [key, value]) => ({ ...acc, [this.toGodotResourcePath(folder, key)]: value }), {});
 
-        var config = {
+        const config = {
             version: `${this.CONFIG_VERSION}`,
             // a set of directories or testsuite paths as key and a optional set of testcases as values
             included: included,
@@ -54,11 +53,11 @@ export class TestRunnerConfiguration {
     }
 
     public save(folder: Uri) {
-        var jsonData = this.toJson(folder);
-        var outputPath = path.resolve(folder.fsPath, this.CONFIG_FILE);
-        fs.writeFile(outputPath, jsonData, function (err: String) {
+        const jsonData = this.toJson(folder);
+        const outputPath = path.resolve(folder.fsPath, this.CONFIG_FILE);
+        fs.writeFile(outputPath, jsonData, err => {
             if (err) {
-                return console.log(err);
+                return console.error(err);
             }
         });
         return outputPath;
