@@ -3,6 +3,7 @@ import { debug, OutputChannel, Position, Range, Uri, ViewColumn, window, workspa
 import { CommandHandler } from './commandHandler';
 import { GdUnitSettings } from './gdUnitSettings';
 import { TestRunnerConfiguration } from './testRunnerConfiguration';
+import path = require("path");
 
 export class TestRunner {
     private _workspaceFolder: WorkspaceFolder | undefined = undefined;
@@ -141,7 +142,7 @@ export class TestRunner {
             .then<string | undefined>(entries =>
                 entries.filter(entry => entry[0].endsWith('.csproj')).map(e => e[0]).shift()
             );
-        return path.join(this.projectUri.fsPath, projectFile ?  projectFile: '');
+        return path.join(this.projectUri.fsPath, projectFile ? projectFile : '');
     }
 
     private debugConfig() {
