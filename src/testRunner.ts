@@ -141,7 +141,7 @@ export class TestRunner {
             .then<string | undefined>(entries =>
                 entries.filter(entry => entry[0].endsWith('.csproj')).map(e => e[0]).shift()
             );
-        return `${this.projectUri.fsPath}\\${projectFile}`;
+        return path.join(this.projectUri.fsPath, projectFile ?  projectFile: '');
     }
 
     private debugConfig() {
