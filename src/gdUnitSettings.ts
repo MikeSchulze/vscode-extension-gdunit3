@@ -7,7 +7,7 @@ import {
 export class GdUnitSettings {
 
     public static verifySettings(terminal: OutputChannel): boolean {
-        let godotExecutable = this.godotExecutable()
+        const godotExecutable = this.godotExecutable()
 
         if (!fs.existsSync(godotExecutable)) {
             terminal.appendLine(`The configured godot executable '${godotExecutable}' can't be found.`);

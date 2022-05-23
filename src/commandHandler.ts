@@ -7,6 +7,7 @@ import { TestRunner } from './testRunner';
 import { TestRunnerConfiguration } from './testRunnerConfiguration';
 import { TestScanner } from './testScanner';
 
+
 export class CommandHandler implements Disposable {
 
     private _onGdUnitEvent: EventEmitter<GdUnitEvent> = new EventEmitter<GdUnitEvent>();
@@ -29,6 +30,7 @@ export class CommandHandler implements Disposable {
             commands.registerTextEditorCommand("cmd-gdUnit3.document.runAll", async (editor: TextEditor) => await this.runAll(editor)),
             commands.registerTextEditorCommand("cmd-gdUnit3.document.debug", async (editor: TextEditor) => await this.debug(editor)),
             commands.registerTextEditorCommand("cmd-gdUnit3.document.debugAll", async (editor: TextEditor) => await this.debugAll(editor)),
+            commands.registerTextEditorCommand("cmd-gdUnit3.document.addTestCase", async (editor: TextEditor) => await this.addTestCase(editor)),
             // explorer commands
             commands.registerCommand("cmd-gdUnit3.explorer.run", async (uri: Uri) => await this.runSelected(uri)),
             commands.registerCommand("cmd-gdUnit3.explorer.debug", async (uri: Uri) => await this.debugSelected(uri)),
@@ -118,10 +120,16 @@ export class CommandHandler implements Disposable {
         }
     }
 
+    private async addTestCase(editor: TextEditor): Promise<void> {
+        await this.testRunner.createTestCase(editor.document.fileName, editor.selection.start);
+        return Promise.resolve();
+    }
+
     private showHelp(): void {
         commands.executeCommand('vscode.open', Uri.parse('https://github.com/MikeSchulze/gdUnit3/wiki'));
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     dispose() {
     }
 }

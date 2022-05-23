@@ -2,7 +2,7 @@
 	"name": "gdunit3",
 	"displayName": "Godot GdUnit Test Explorer",
 	"description": "Test Explorer for GdUnit3",
-	"version": "1.0.1",
+	"version": "2.2.0",
 	"publisher": "mikeschulze",
 	"license": "MIT",
 	"repository": {
@@ -135,6 +135,10 @@
 				}
 			},
 			{
+				"command": "cmd-gdUnit3.document.addTestCase",
+				"title": "Create GdUnit Test"
+			},
+			{
 				"command": "cmd-gdUnit3.explorer.run",
 				"title": "Run GdUnit Test",
 				"icon": {
@@ -206,6 +210,11 @@
 					"command": "cmd-gdUnit3.document.debugAll",
 					"group": "cmd-gdUnit3@4",
 					"when": "resourceLangId == csharp && cmd-gdUnit3:is-ready == true"
+				},
+				{
+					"command": "cmd-gdUnit3.document.addTestCase",
+					"group": "cmd-gdUnit3@5",
+					"when": "resourceLangId == csharp && cmd-gdUnit3:is-ready == true"
 				}
 			],
 			"explorer/context": [
@@ -266,8 +275,8 @@
 		"@types/node": "^17.0.15",
 		"@types/uuid": "^8.3.4",
 		"@types/vscode": "^1.63.0",
-		"@typescript-eslint/eslint-plugin": "^5.1.0",
-		"@typescript-eslint/parser": "^5.1.0",
+		"@typescript-eslint/eslint-plugin": "^5.25.0",
+		"@typescript-eslint/parser": "^5.25.0",
 		"@vscode/test-electron": "^1.6.2",
 		"eslint": "^8.1.0",
 		"glob": "^7.1.7",

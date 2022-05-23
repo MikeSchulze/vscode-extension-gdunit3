@@ -6,6 +6,11 @@ This extension provides an inspector to run and debug your GdUnit3 c# tests in V
 
 ## Release Notes
 
+### 2.2.0
+
+* Add dependency check to GdUnit3 plugin v2.2.0
+* Add context menu to create test from source
+
 ### 1.0.0 - Beta
 
 Initial release of GdUnit3 vscode extension

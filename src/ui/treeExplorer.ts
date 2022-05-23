@@ -1,4 +1,4 @@
-import { commands, Disposable, ExtensionContext, Range, TreeItemCollapsibleState, TreeView, TreeViewSelectionChangeEvent, Uri, window, workspace } from "vscode";
+import { commands, Disposable, ExtensionContext, Range, TreeView, TreeViewSelectionChangeEvent, Uri, window, workspace } from "vscode";
 import { CommandHandler } from "../commandHandler";
 import { EVENT_TYPE, GdUnitEvent } from "../gdUnitEvent";
 import { ReportView } from "./parts/reportView";
@@ -43,27 +43,25 @@ export class TestTreeExplorer implements Disposable {
         this.reportView.update(event.selection[0].reports);
     }
 
-    public listen(data: any): void {
-        this._treeProvider.listen(data);
-        if (data._type === 'GdUnitEvent') {
-            if (data.type == EVENT_TYPE.STOP) {
-                CommandHandler.setStateRunning(false);
-            }
+    public listen(event: GdUnitEvent): void {
+        this._treeProvider.listen(event);
+        if (event.type == EVENT_TYPE.STOP) {
+            CommandHandler.setStateRunning(false);
         }
     }
 
     private previousSelectionTime: number = Date.now();
     private doubleClickTime = 200;
 
-    private isDoubleClicked(): Promise<Boolean> | undefined {
-        var currentTime = Date.now();
-        var isDoubleClicked: Boolean = currentTime - this.previousSelectionTime <= this.doubleClickTime;
+    private isDoubleClicked(): Promise<boolean> | undefined {
+        const currentTime = Date.now();
+        const isDoubleClicked: boolean = currentTime - this.previousSelectionTime <= this.doubleClickTime;
         this.previousSelectionTime = currentTime;
         return isDoubleClicked ? Promise.resolve(isDoubleClicked) : undefined;
     }
 
     private openDocument(node: TreeNode) {
-        var lineNumber = node.reports ? node.reports[0].line_number - 1 : node.lineNumber;
+        const lineNumber = node.reports ? node.reports[0].line_number - 1 : node.lineNumber;
         workspace.openTextDocument(Uri.file(node.resourcPath))
             .then(document => window.showTextDocument(document, { preview: true, selection: new Range(lineNumber ?? 0, 0, lineNumber ?? 0, 0) }));
     }

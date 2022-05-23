@@ -155,7 +155,7 @@ export class TreeNode extends TreeItem {
 
 export class TreeNodeTestSuite extends TreeNode {
 
-    private successfullyCompleted: number = 0;
+    private successfullyCompleted = 0;
 
     constructor(readonly testSuite: TestSuite) {
         super(testSuite.resource_path, testSuite.name);

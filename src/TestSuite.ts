@@ -1,4 +1,4 @@
-import {  Disposable } from "vscode";
+import { Disposable } from "vscode";
 import { TestCase } from "./testCase";
 
 export class TestSuite implements Disposable {
@@ -9,6 +9,7 @@ export class TestSuite implements Disposable {
         public readonly test_cases: Array<TestCase>) {
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     dispose() {
     }
 }
