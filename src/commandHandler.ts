@@ -126,7 +126,7 @@ export class CommandHandler implements Disposable {
     }
 
     private showHelp(): void {
-        commands.executeCommand('vscode.open', Uri.parse('https://github.com/MikeSchulze/gdUnit3/wiki'));
+        commands.executeCommand('vscode.open', Uri.parse('https://mikeschulze.github.io/gdUnit3/'));
     }
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
