@@ -1,5 +1,5 @@
 import { EventEmitter as EventListener } from 'events';
-import { Event, EventEmitter, TreeDataProvider, TreeItem, window } from "vscode";
+import { Event, EventEmitter, TreeDataProvider, TreeItem, TreeView } from "vscode";
 import { EVENT_TYPE, GdUnitEvent } from "../../gdUnitEvent";
 import { TestSuite } from "../../testSuite";
 import { STATE, TreeNode, TreeNodeTestCase, TreeNodeTestSuite } from "./treeNode";
@@ -98,12 +98,12 @@ export class TreeProvider extends EventListener implements TreeDataProvider<Tree
         }
         if (event.type == EVENT_TYPE.TESTSUITE_BEFORE) {
             node.setStateRunning();
+            this.fireSelectNode(node);
         } else if (event.type == EVENT_TYPE.TESTSUITE_AFTER) {
             node.setElapsedTime(event.elapsedTime());
             node.updateState(event);
         }
         this.fireUpdateNode(node);
-        this.fireSelectNode(node);
     }
 
     private updateTestCase(event: GdUnitEvent): void {
@@ -161,27 +161,5 @@ export class TreeProvider extends EventListener implements TreeDataProvider<Tree
 
     refresh(): void {
         this.fireUpdateNode();
-    }
-
-    private testProgressBar() {
-        window.withProgress({
-            location: { viewId: 'gdUnit3TestExplorer' }
-            //location: vscode.ProgressLocation.Notification
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        }, (progress, token) => {
-            let counter = 0;
-            let interval: NodeJS.Timeout;
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            return new Promise((resolve, reject) => {
-                interval = setInterval(() => {
-                    progress.report({ message: `Run test ${counter}:100`, increment: 1 });
-                    counter++;
-                    if (counter === 100) {
-                        clearInterval(interval);
-                        resolve("100");
-                    }
-                }, 100);
-            });
-        });
     }
 }

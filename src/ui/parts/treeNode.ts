@@ -50,8 +50,8 @@ export class TreeNode extends TreeItem {
 
     public reports: GdUnitReport[] | undefined = undefined;
 
-    private collaps() {
-        if (this.collapsibleState != TreeItemCollapsibleState.None) {
+    collaps() {
+        if (this.collapsibleState == TreeItemCollapsibleState.Expanded) {
             this.collapsibleState = TreeItemCollapsibleState.Collapsed;
         }
     }

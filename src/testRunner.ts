@@ -62,10 +62,12 @@ export class TestRunner {
         const args = [
             "--path",
             `${this._workspaceFolder?.uri.fsPath}`,
-            `res://addons/gdUnit3/src/core/GdUnitRunner.tscn`];//,
-        //`--no-window`];
+            `res://addons/gdUnit3/src/core/GdUnitRunner.tscn`];
         if (debug) {
             args.splice(2, 0, '-d');
+        }
+        else {
+            args.push(`--no-window`);
         }
         this._console.show();
         this._console.appendLine(`Run Test's ...`);
