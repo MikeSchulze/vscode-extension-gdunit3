@@ -6,7 +6,7 @@ This extension provides an inspector to run and debug your GdUnit3 c# tests in V
 
 ## Release Notes
 
-### 2.2.0
+### 2.2.2
 
 * Add dependency check to GdUnit3 plugin v2.2.0
 * Add context menu to generate a test-case from source

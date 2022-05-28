@@ -15,6 +15,7 @@ export class TestTreeExplorer implements Disposable {
     constructor(context: ExtensionContext, private reportView: ReportView) {
         let revealQueue = Promise.resolve();
         this._treeProvider = new TreeProvider();
+        this._treeProvider.onDidChangeTreeData(this.clearReport);
         this._treeProvider.onDidChangeSelection(async node => {
             if (node) {
                 try {
@@ -58,7 +59,6 @@ export class TestTreeExplorer implements Disposable {
         }
         else if (event.type == EVENT_TYPE.INIT) {
             this._progressBar.startProgress(event.total_count);
-            this.clearReport();
         }
         else if (event.type == EVENT_TYPE.STOP) {
             CommandHandler.setStateRunning(false);
