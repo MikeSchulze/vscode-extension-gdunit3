@@ -5,6 +5,9 @@ This extension provides an inspector to run and debug your GdUnit3 c# tests in V
 ![Screenshot](resources/vsc-extension.png)
 
 ## Release Notes
+### 2.2.3 (HotFix)
+* Fixed failing test generation (works now with and without namespaces)
+* Changed minimum required GdUnit3 plugin to v2.2.3
 
 ### 2.2.2
 
