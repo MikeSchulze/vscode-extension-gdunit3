@@ -121,8 +121,7 @@ export class CommandHandler implements Disposable {
     }
 
     private async addTestCase(editor: TextEditor): Promise<void> {
-        await this.testRunner.createTestCase(editor.document.fileName, editor.selection.start);
-        return Promise.resolve();
+        await this.testRunner.addTestCase(editor.document.fileName, editor.selection.start);
     }
 
     private showHelp(): void {

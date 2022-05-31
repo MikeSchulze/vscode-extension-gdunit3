@@ -79,7 +79,16 @@ export class TestRunner {
         }
     }
 
-    public async createTestCase(fileName: string, position: Position): Promise<void> {
+
+    public async addTestCase(fileName: string, position: Position): Promise<void> {
+        await this.buildProject("Release")
+            .then((exitCode) => {
+                if (exitCode == 0) this.createTestCase(fileName, position);
+                else this._console.appendLine(`Can't generate Test Case, build failed by exit code ${exitCode}`);
+            });
+    }
+
+    private async createTestCase(fileName: string, position: Position): Promise<void> {
         const args = [
             "--path",
             `${this._workspaceFolder?.uri.fsPath}`,
@@ -98,7 +107,7 @@ export class TestRunner {
             if (process) {
                 process.stdout?.on('data', (stream) => {
                     const line = `${stream}`;
-                    if (line.startsWith('JSON_RESULT:')) {
+                    if (line.includes('JSON_RESULT:')) {
                         result = rExp.exec(line)?.at(2);
                     }
                 });
@@ -114,15 +123,15 @@ export class TestRunner {
                                 .then(document => window.showTextDocument(document, { viewColumn: ViewColumn.Beside, selection: new Range(testCase.line, 0, testCase.line, 0) }));
                         });
                     } else {
-                        this._console.appendLine(`Can't generate test case! ${code} ${signal}`);
+                        this._console.appendLine(`Can't generate test case! Error: ${code} Message: ${result}`);
                     }
                 });
             }
         })
     }
 
-    private async buildProject(target: string): Promise<void> {
-        this._console.appendLine(`Build ...${target}`);
+    private async buildProject(target: string): Promise<number | null> {
+        this._console.appendLine(`Building ... ${target}`);
         const projectFile = await this.findProject();
         const fullCommand = `dotnet build ${projectFile} -verbosity:m`; // -p:Configuration=${target}
         this._buildProcess = cp.exec(fullCommand, (err) => {
@@ -136,6 +145,7 @@ export class TestRunner {
             this._buildProcess?.on('close', resolve)
         })
         this._console.appendLine(``);
+        return this._buildProcess.exitCode
     }
 
     private async findProject(): Promise<string> {

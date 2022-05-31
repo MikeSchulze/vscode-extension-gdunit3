@@ -8,7 +8,7 @@ import { TestTreeExplorer } from "./ui/treeExplorer";
 import { getGdUnit3Version, GdUnit3Version } from './GdUnit3Version';
 
 
-const MIN_REQUIRED_GDUNIT_VERSION = new GdUnit3Version(2, 2, 0);
+const MIN_REQUIRED_GDUNIT_VERSION = new GdUnit3Version(2, 2, 3);
 
 export async function activate(context: ExtensionContext) {
 
