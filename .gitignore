@@ -7,7 +7,6 @@ node_modules/
 .directory
 *~
 .DS_Store
-.vscode/
 .vscode-test/
 
 # temporary generated files
