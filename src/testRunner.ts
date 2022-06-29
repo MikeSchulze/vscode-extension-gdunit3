@@ -108,11 +108,17 @@ export class TestRunner {
                 process.stdout?.on('data', (stream) => {
                     const line = `${stream}`;
                     if (line.includes('JSON_RESULT:')) {
-                        result = rExp.exec(line)?.at(2);
+                        try {
+                            const r = rExp.exec(line) as RegExpExecArray;
+                            result = r[2];
+                        }
+                        catch(err) {
+                            console.error(err);
+                        }
                     }
                 });
                 process.stderr?.on('data', (stream) => console.debug(`ERR: ${stream}`));
-                process.on('close', async (code, signal) => {
+                process.on('close', async (code) => {
                     if (code == 0 && result != undefined) {
                         type Test = { line: number; path: string; }
                         type Response = { TestCases: Array<Test>; }
