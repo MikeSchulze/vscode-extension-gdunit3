@@ -1,25 +1,24 @@
 import * as cp from "child_process";
-import { debug, OutputChannel, Position, Range, Uri, ViewColumn, window, workspace, WorkspaceConfiguration, WorkspaceFolder } from 'vscode';
+import { debug, Position, Range, Uri, ViewColumn, window, workspace, WorkspaceConfiguration, WorkspaceFolder } from 'vscode';
 import { CommandHandler } from './commandHandler';
 import { GdUnitSettings } from './gdUnitSettings';
 import { TestRunnerConfiguration } from './testRunnerConfiguration';
 import path = require("path");
+import { Logger } from "./extension";
+
 
 export class TestRunner {
     private _workspaceFolder: WorkspaceFolder | undefined = undefined;
     private readonly projectUri: Uri;
     private _buildProcess: cp.ChildProcess | undefined;
     private _runnerProcess: cp.ChildProcess | undefined;
-    private _console: OutputChannel;
-
 
     constructor(public readonly config: WorkspaceConfiguration) {
         const folders = workspace.workspaceFolders;
         this.projectUri = folders ? folders[0].uri : Uri.file("invalid");
         this._workspaceFolder = folders ? folders[0] : undefined;
-        this._console = window.createOutputChannel("gdUnit3 Console");
         // if (folder == undefined) {
-        //     console.error("Undefined workspace folder, can't save runner configuration.")
+        //     Logger.error("Undefined workspace folder, can't save runner configuration.")
         //     return;
         // }
     }
@@ -27,25 +26,29 @@ export class TestRunner {
     public async run(config: TestRunnerConfiguration): Promise<void> {
         config.save(this.projectUri);
         await this.buildProject("Release")
-            .then(() => this.runCommand());
+            .then(() => this.runCommand())
+            .catch(e => Logger.error(e));
     }
 
     public async reRun(): Promise<void> {
         await this.buildProject("Release")
-            .then(() => this.runCommand());
+            .then(() => this.runCommand())
+            .catch(e => Logger.error(e));
     }
 
     public async debug(config: TestRunnerConfiguration): Promise<void> {
         config.save(this.projectUri);
         await this.buildProject("Debug")
-            .then(() => debug.startDebugging(this._workspaceFolder, this.debugConfig()))
-            .then(() => this.runCommand(true));
+            .then(() => debug.startDebugging(this._workspaceFolder, this.debugConfig()), e => Logger.error(e))
+            .then(() => this.runCommand(true))
+            .catch(e => Logger.error(e));
     }
 
     public async reRunDebug(): Promise<void> {
         await this.buildProject("Debug")
-            .then(() => debug.startDebugging(this._workspaceFolder, this.debugConfig()))
-            .then(() => this.runCommand(true));
+            .then(() => debug.startDebugging(this._workspaceFolder, this.debugConfig()), e => Logger.error(e))
+            .then(() => this.runCommand(true))
+            .catch(e => Logger.error(e));
     }
 
     public async stop(): Promise<void> {
@@ -55,7 +58,7 @@ export class TestRunner {
     }
 
     private async runCommand(debug = false): Promise<void> {
-        if (!GdUnitSettings.verifySettings(this._console)) {
+        if (!GdUnitSettings.verifySettings()) {
             CommandHandler.setStateRunning(false);
             return;
         }
@@ -69,22 +72,23 @@ export class TestRunner {
         else {
             args.push(`--no-window`);
         }
-        this._console.show();
-        this._console.appendLine(`Run Test's ...`);
+        Logger.info(`Run Test's ...`);
         this._runnerProcess = cp.spawn(GdUnitSettings.godotExecutable(), args);
         if (this._runnerProcess) {
-            this._runnerProcess.stdout?.on('data', (stream) => this._console.append(`${stream}`));
-            this._runnerProcess.stderr?.on('data', (stream) => this._console.append(`ERR: ${stream}`));
-            this._runnerProcess.on('close', (code, signal) => this._console.append(`Process ends with: ${code}, signal: ${signal} `));
+            this._runnerProcess.stdout?.on('data', stream => Logger.append(`${stream}`));
+            this._runnerProcess.stderr?.on('data', stream => Logger.append(`ERR: ${stream}`));
+            this._runnerProcess.on('close', (code, signal) => {
+                Logger.info(`Run Test's finished.`);
+                Logger.debug(`Process ends with: ${code}, signal: ${signal}`);
+            })
         }
     }
-
 
     public async addTestCase(fileName: string, position: Position): Promise<void> {
         await this.buildProject("Release")
             .then((exitCode) => {
                 if (exitCode == 0) this.createTestCase(fileName, position);
-                else this._console.appendLine(`Can't generate Test Case, build failed by exit code ${exitCode}`);
+                else Logger.error(`Can't generate Test Case, build failed by exit code ${exitCode}`);
             });
     }
 
@@ -101,8 +105,8 @@ export class TestRunner {
         await new Promise(() => {
             const rExp = new RegExp('^(JSON_RESULT:)({.*[}]$)', 'gms');
             let result: string | undefined;
-            this._console.show();
-            this._console.appendLine(`Generate Test Case ...`);
+            Logger.show();
+            Logger.info(`Generate Test Case ...`);
 
             if (process) {
                 process.stdout?.on('data', (stream) => {
@@ -112,24 +116,24 @@ export class TestRunner {
                             const r = rExp.exec(line) as RegExpExecArray;
                             result = r[2];
                         }
-                        catch(err) {
-                            console.error(err);
+                        catch (err) {
+                            Logger.error(err);
                         }
                     }
                 });
-                process.stderr?.on('data', (stream) => console.debug(`ERR: ${stream}`));
+                process.stderr?.on('data', stream => Logger.error(`${stream}`));
                 process.on('close', async (code) => {
                     if (code == 0 && result != undefined) {
                         type Test = { line: number; path: string; }
                         type Response = { TestCases: Array<Test>; }
                         const response: Response = JSON.parse(result);
                         response.TestCases.forEach(async testCase => {
-                            this._console.appendLine(`Added Test Case ${testCase.path}:${testCase.line}`);
+                            Logger.info(`Added Test Case ${testCase.path}:${testCase.line}`);
                             await workspace.openTextDocument(Uri.file(testCase.path))
                                 .then(document => window.showTextDocument(document, { viewColumn: ViewColumn.Beside, selection: new Range(testCase.line, 0, testCase.line, 0) }));
                         });
                     } else {
-                        this._console.appendLine(`Can't generate test case! Error: ${code} Message: ${result}`);
+                        Logger.error(`Can't generate test case! Error Code: ${code}\nMessage: ${result}`);
                     }
                 });
             }
@@ -137,20 +141,15 @@ export class TestRunner {
     }
 
     private async buildProject(target: string): Promise<number | null> {
-        this._console.appendLine(`Building ... ${target}`);
+        Logger.info(`Building ... ${target}`);
         const projectFile = await this.findProject();
         const fullCommand = `dotnet build ${projectFile} -verbosity:m`; // -p:Configuration=${target}
-        this._buildProcess = cp.exec(fullCommand, (err) => {
-            if (err) {
-                this._console.append(`ERROR: ${err}`);
-            }
-        });
-        this._buildProcess.stdout?.on('data', (stream) => this._console.append(`${stream}`));
-        this._buildProcess.stderr?.on('data', (stream) => this._console.append(`ERR: ${stream}`));
+        this._buildProcess = cp.exec(fullCommand, err => Logger.error(err));
+        this._buildProcess.stdout?.on('data', stream => Logger.append(`${stream}`));
+        this._buildProcess.stderr?.on('data', e => Logger.error(e));
         await new Promise((resolve) => {
             this._buildProcess?.on('close', resolve)
         })
-        this._console.appendLine(``);
         return this._buildProcess.exitCode
     }
 

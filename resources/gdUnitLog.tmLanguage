@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>scopeName</key>
+        <string>gdUnitLog.log</string>
+        
+        <key>patterns</key>
+        <array>
+            <!-- Quoted strings -->
+            <dict>
+                <key>match</key>
+                <string>"(.*?)"</string>
+                <key>name</key>
+                <string>string.quoted</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>'(.*?)'</string>
+                <key>name</key>
+                <string>string.quoted</string>
+            </dict>
+
+            <!-- brackets -->
+            <dict>
+                <key>match</key>
+                <string><(.*?)></string>
+                <key>name</key>
+                <string>string.quoted</string>
+            </dict>
+
+            <!-- GUID -->
+            <dict>
+                <key>match</key>
+                <string>\b(?i:([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))\b</string>
+                <key>name</key>
+                <string>support.class</string>
+            </dict>
+
+            <!-- email address -->
+            <dict>
+                <key>match</key>
+                <string>\S+@\S+\.\S+</string>
+                <key>name</key>
+                <string>markup.bold</string>
+            </dict>
+
+            <!-- Exception -->
+            <dict>
+                <key>match</key>
+                <string>\b(?i:((\.)*[a-z]|[0-9])*(Exception))\b</string>
+                <key>name</key>
+                <string>invalid</string>
+            </dict>
+
+            <!-- Dates -->
+            <dict>
+                <key>match</key>
+                <string>\b(((0|1)?[0-9][1-2]?)|(Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|Jun(e)?|Jul(y)?|Aug(ust)?|Sept(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?))[/|\-|\.| ]([0-2]?[0-9]|[3][0-1])[/|\-|\.| ]((19|20)?[0-9]{2})\b</string>
+                <key>name</key>
+                <string>constant.numeric</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>\b((19|20)?[0-9]{2}[/|\-|\.| ](((0|1)?[0-9][1-2]?)|(Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|Jun(e)?|Jul(y)?|Aug(ust)?|Sept(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?))[/|\-|\.| ]([0-2]?[0-9]|[3][0-1]))\b</string>
+                <key>name</key>
+                <string>constant.numeric</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>\b([0-2]?[0-9]|[3][0-1])[/|\-|\.| ](((0|1)?[0-9][1-2]?)|(Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|Jun(e)?|Jul(y)?|Aug(ust)?|Sept(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?))[/|\-|\.| ]((19|20)?[0-9]{2})\b</string>
+                <key>name</key>
+                <string>constant.numeric</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>\b([0|1]?[0-9]|2[0-3])\:[0-5][0-9](\:[0-5][0-9])?(\.([0-9]*))?\b</string>
+                <key>name</key>
+                <string>constant.numeric</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>\b([0|1]?[0-9]|2[0-3])\:[0-5][0-9](\:[0-5][0-9])?( ?(?i:(a|p)m?))?( ?[+-]?[0-9]*)?\b</string>
+                <key>name</key>
+                <string>constant.numeric</string>
+            </dict>
+
+            <!-- Numeric -->
+            <dict>
+                <key>match</key>
+                <string>\b\d+\.?\d*?\b</string>
+                <key>name</key>
+                <string>constant.numeric</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>\b(?i:(0?x)?[0-9a-f][0-9a-f]+)\b</string>
+                <key>name</key>
+                <string>constant.numeric</string>
+            </dict>
+
+            <!-- Log levels -->
+            <dict>
+                <key>match</key>
+                <string>\[(INFO)\]:</string>
+                <key>name</key>
+                <string>markup.inserted</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>\[(WARN)\]:</string>
+                <key>name</key>
+                <string>markup.deleted</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>\[(ERROR)\]:|\[(EXCEPTION)\]:</string>
+                <key>name</key>
+                <string>invalid.deprecated, strong</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>\[(DEBUG)\]:</string>
+                <key>name</key>
+                <string>keyword</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>\[(TRACE)\]:</string>
+                <key>name</key>
+                <string>comment</string>
+            </dict>
+
+            <!-- Others -->
+            <dict>
+                <key>match</key>
+                <string>\b(?i:(local|connected|disconnected))(\:|\b)</string>
+                <key>name</key>
+                <string>support.function</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>\b(?i:(server|client|running|remote))(\:|\b)</string>
+                <key>name</key>
+                <string>comment.line</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>(?i:(gdUnit3))</string>
+                <key>name</key>
+                <string>constant.language</string>
+            </dict>
+
+            <dict>
+                <key>match</key>
+                <string>\b(?i:([a-z]|[0-9])+\:((\/\/)|((\/\/)?(\S)))+)</string>
+                <key>name</key>
+                <string>storage</string>
+            </dict>
+            <dict>
+                <key>match</key>
+                <string>\b(?i:(([a-z]|[0-9]|[_|-])*(\.([a-z]|[0-9]|[_|-])*)+))\b</string>
+                <key>name</key>
+                <string>support.type</string>
+            </dict>
+        </array>
+        <key>uuid</key>
+        <string>d8b20d56-faa5-11ec-b939-0242ac120002</string>
+    </dict>
+</plist>

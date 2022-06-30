@@ -4,6 +4,7 @@ import {
 } from 'vscode';
 import { GdUnitSettings } from './gdUnitSettings';
 import fs = require('fs');
+import { Logger } from './extension';
 
 export class TestRunnerConfiguration {
     readonly CONFIG_VERSION = '2.0';
@@ -55,11 +56,7 @@ export class TestRunnerConfiguration {
     public save(folder: Uri) {
         const jsonData = this.toJson(folder);
         const outputPath = path.resolve(folder.fsPath, this.CONFIG_FILE);
-        fs.writeFile(outputPath, jsonData, err => {
-            if (err) {
-                return console.error(err);
-            }
-        });
+        fs.writeFile(outputPath, jsonData, e => Logger.error(e));
         return outputPath;
     }
 

@@ -1,5 +1,6 @@
 import { EventEmitter as EventListener } from 'events';
 import { Event, EventEmitter, TreeDataProvider, TreeItem, TreeView } from "vscode";
+import { Logger } from '../../extension';
 import { EVENT_TYPE, GdUnitEvent } from "../../gdUnitEvent";
 import { TestSuite } from "../../testSuite";
 import { STATE, TreeNode, TreeNodeTestCase, TreeNodeTestSuite } from "./treeNode";
@@ -45,7 +46,7 @@ export class TreeProvider extends EventListener implements TreeDataProvider<Tree
         } else if (data instanceof TestSuite) {
             this.onAddTestSuite(data);
         } else {
-            console.log("Message:", data);
+            Logger.log(`Message: ${data}`);
         }
     }
 

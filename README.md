@@ -8,6 +8,9 @@ This extension provides an inspector to run and debug your GdUnit3 c# tests in V
 
 ### Version 2.2.4
 - Fixed create test was failing on linux systems
+- Improved logging
+- Extension activate/deactivate now shows/hide the icon on the activity bar
+- An error is displayed when missing dependencies are detected (GdUnit3 plugin is not installed)
 
 ### 2.2.3 (HotFix)
 * Fixed failing test generation (works now with and without namespaces)

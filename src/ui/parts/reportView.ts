@@ -1,4 +1,5 @@
 import { CancellationToken, Disposable, ExtensionContext, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window } from 'vscode';
+import { Logger } from '../../extension';
 import { GdUnitReport } from '../../gdUnitEvent';
 
 class ReportViewProvider implements WebviewViewProvider {
@@ -83,7 +84,7 @@ export class ReportView implements Disposable {
                 .replace(this.lineEndTag, this.lineEndTagReplace)
                 .replace(this.spaceTag, this.spaceTagReplace);
         } catch (error) {
-            console.error(error);
+            Logger.error(error);
             return message;
         }
     }

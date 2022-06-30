@@ -1,5 +1,7 @@
 import path = require("path");
 import { Uri, workspace } from "vscode";
+import * as fs from 'fs';
+import { Logger } from "./extension";
 
 export class GdUnit3Version {
     private _major: number;
@@ -39,11 +41,18 @@ export class GdUnit3Version {
     }
 }
 
-export async function getGdUnit3Version(): Promise<GdUnit3Version | undefined> {
-    console.log('Scanning GdUnit plugin version.');
+const MIN_REQUIRED_GDUNIT_VERSION = new GdUnit3Version(2, 2, 3);
+
+export async function verifyGdUnit3PluginVersion(): Promise<GdUnit3Version> {
+    Logger.info('Scanning GdUnit3 plugin version.');
     const folders = workspace.workspaceFolders;
     const projectUri = folders ? folders[0].uri : Uri.file("invalid");
     const pluginConf = path.resolve(projectUri.fsPath, 'addons/gdUnit3/plugin.cfg');
+
+    if (!fs.existsSync(pluginConf)) {
+        throw Error(`No GdUnit3 plugin configuration found '${pluginConf}'\n You need to install the Godot plugin GdUnit3!`);
+    }
+
     return await workspace.openTextDocument(Uri.file(pluginConf))
         .then(document => {
             for (let i = 0; i < document.lineCount; i++) {
@@ -53,6 +62,12 @@ export async function getGdUnit3Version(): Promise<GdUnit3Version | undefined> {
                     return GdUnit3Version.parse(version);
                 }
             }
-            return undefined;
+            throw Error(`Can't parse GdUnit3 plugin version at ${pluginConf}`);
+        }).then(version => {
+
+            if (MIN_REQUIRED_GDUNIT_VERSION.isLessThan(version)) {
+                throw Error(`This extension requires the Godot plugin 'GdUnit3' installed with minimum version ${MIN_REQUIRED_GDUNIT_VERSION}, but found ${version}.`);
+            }
+            return version;
         });
 }
