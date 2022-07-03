@@ -51,13 +51,14 @@ Property                                       | Description
 `gdunit3.godotExecutable`                      | The path to the Godot executable. Both relative and absolute paths are accepted.
 `gdunit3.server.port`                          | The GdUnit server port to comunicate with the test runner client.
 `gdunit3.debuger.port`                         | The c# debuger port (23685)
+`gdunit3.logLevel`                             | The log level to control the output of 'gdUnitLog.log'
 
 
 ## Requirements
 * C#
 * VS Code Mono Debug
 * Installed Godot-Mono 3.3.x
-  * Installed GdUnit3 v2.0.0 plugin
+  * Installed GdUnit3 v2.2.3 plugin
 
 ## Known Issues
 
