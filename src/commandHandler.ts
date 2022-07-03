@@ -1,12 +1,12 @@
 import {
     commands, Disposable, Event, EventEmitter, ExtensionContext, FileType, TextEditor, Uri, workspace
 } from 'vscode';
+import { Logger } from './extension';
 import { GdUnitEvent } from './gdUnitEvent';
 import { GdUnitSettings } from './gdUnitSettings';
 import { TestRunner } from './testRunner';
 import { TestRunnerConfiguration } from './testRunnerConfiguration';
 import { TestScanner } from './testScanner';
-
 
 export class CommandHandler implements Disposable {
 
@@ -41,8 +41,6 @@ export class CommandHandler implements Disposable {
             commands.registerCommand('cmd-gdUnit3.reRunDebug', async () => await this.reRunDebug()),
             commands.registerCommand('cmd-gdUnit3.stop', () => this.stopRunning())
         );
-        // activate context menues
-        commands.executeCommand('setContext', 'cmd-gdUnit3:is-ready', true);
     }
 
     public static setStateRunning(isRunning: boolean): void {
@@ -58,7 +56,7 @@ export class CommandHandler implements Disposable {
         CommandHandler.setStateRunning(true);
         await this.testScanner.scanDocument(new TestRunnerConfiguration(), editor.document, editor.selection.start)
             .then(async config => await this.testRunner.run(config))
-            .catch(console.error);
+            .catch(e => Logger.error(e));
     }
 
     private async reRun(): Promise<void> {
@@ -70,7 +68,7 @@ export class CommandHandler implements Disposable {
         CommandHandler.setStateRunning(true);
         await this.testScanner.scanDocument(new TestRunnerConfiguration(), editor.document)
             .then(async config => await this.testRunner.run(config))
-            .catch(console.error);
+            .catch(e => Logger.error(e));
     }
 
     private async reRunDebug(): Promise<void> {
@@ -82,14 +80,14 @@ export class CommandHandler implements Disposable {
         CommandHandler.setStateRunning(true);
         await this.testScanner.scanDocument(new TestRunnerConfiguration(), editor.document, editor.selection.start)
             .then(async config => await this.testRunner.debug(config))
-            .catch(console.error);
+            .catch(e => Logger.error(e));
     }
 
     private async debugAll(editor: TextEditor): Promise<void> {
         CommandHandler.setStateRunning(true);
         await this.testScanner.scanDocument(new TestRunnerConfiguration(), editor.document)
             .then(async config => await this.testRunner.debug(config))
-            .catch(console.error);
+            .catch(e => Logger.error(e));
     }
 
     private async runSelected(uri: Uri): Promise<void> {
@@ -98,7 +96,7 @@ export class CommandHandler implements Disposable {
         if (isDirectory) {
             await this.testScanner.scanDirectory(new TestRunnerConfiguration(), uri)
                 .then(async config => await this.testRunner.run(config))
-                .catch(console.error);
+                .catch(e => Logger.error(e));
         } else {
             await workspace.openTextDocument(uri)
                 .then(async document => await this.testScanner.scanDocument(new TestRunnerConfiguration(), document))
@@ -112,7 +110,7 @@ export class CommandHandler implements Disposable {
         if (isDirectory) {
             await this.testScanner.scanDirectory(new TestRunnerConfiguration(), uri)
                 .then(async config => await this.testRunner.debug(config))
-                .catch(console.error);
+                .catch(e => Logger.error(e));
         } else {
             await workspace.openTextDocument(uri)
                 .then(async document => await this.testScanner.scanDocument(new TestRunnerConfiguration(), document))

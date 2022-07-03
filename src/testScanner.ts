@@ -1,6 +1,7 @@
 import {
     commands, Disposable, DocumentSymbol, FileType, Position, Range, SymbolKind, TextDocument, Uri, workspace
 } from 'vscode';
+import { Logger } from './extension';
 import { TestRunnerConfiguration } from "./testRunnerConfiguration";
 
 export class TestScanner implements Disposable {
@@ -11,7 +12,7 @@ export class TestScanner implements Disposable {
             document.uri
         ).then(async symbol => {
             if (symbol == undefined || symbol.length == 0) {
-                console.log(`no tests found on ${document.fileName}`)
+                Logger.warn(`no tests found on ${document.fileName}`)
                 return [];
             }
 
@@ -24,7 +25,7 @@ export class TestScanner implements Disposable {
 
             const start = clazzSymbols[0]?.range.start;
             if (!document.lineAt(start)?.text.includes("[TestSuite")) {
-                console.debug(`exclude ${document.fileName}, is not a testsuite`);
+                Logger.debug(`exclude ${document.fileName}, is not a testsuite`);
                 return [];
             }
             return methods
@@ -34,7 +35,7 @@ export class TestScanner implements Disposable {
                     return document.lineAt(start)?.text.includes("[TestCase");
                 });
         }).then(undefined, err => {
-            console.error("scan error", err);
+            Logger.error(`scan error ${err}`);
             return [];
         });
     }
@@ -52,7 +53,7 @@ export class TestScanner implements Disposable {
     }
 
     public async scanDocument(config: TestRunnerConfiguration, doc: TextDocument, position?: Position | undefined): Promise<TestRunnerConfiguration> {
-        console.log(`Scan file: ${doc.fileName}`);
+        Logger.info(`Scan file: ${doc.fileName}`);
         await this.findAllTestCases(doc)
             .then(methods => {
                 if (position != null) {
@@ -62,12 +63,12 @@ export class TestScanner implements Disposable {
                     config.addTestCases(doc.fileName, methods.map(this.testCaseName));
                 }
             })
-            .then(undefined, console.error);
+            .then(undefined, e => Logger.error(e));
         return config;
     }
 
     public async scanDirectory(config: TestRunnerConfiguration, folder: Uri): Promise<TestRunnerConfiguration> {
-        console.debug(`Scan directory: ${folder.path}`);
+        Logger.debug(`Scan directory: ${folder.path}`);
         await workspace.fs
             .readDirectory(folder)
             .then(async entries =>
@@ -82,7 +83,7 @@ export class TestScanner implements Disposable {
                         await this.scanDirectory(config, next);
                     }
                 })))
-            .then(undefined, console.error);
+            .then(undefined, e => Logger.error(e));
         return config;
     }
 

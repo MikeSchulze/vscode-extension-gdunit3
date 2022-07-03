@@ -3,6 +3,7 @@ import { EventEmitter } from 'events';
 import * as net from 'net';
 import { AddressInfo, Server } from 'net';
 import { Disposable } from 'vscode';
+import { Logger } from '../extension';
 import { GdUnitEvent } from '../gdUnitEvent';
 import { GdUnitSettings } from '../gdUnitSettings';
 import { TestSuite } from '../testSuite';
@@ -18,10 +19,10 @@ export class TestEventServer extends EventEmitter implements Disposable {
         const server = net.createServer()
             .listen(port, this.HOST, function () {
                 const addressInfo = server.address() as AddressInfo;
-                console.log(`Server listening on ${addressInfo.address}:${addressInfo.port}`);
+                Logger.info(`Server listening on ${addressInfo.address}:${addressInfo.port}`);
             })
             .on('connection', socket => {
-                console.log(`New Client connection from ${socket.remoteAddress}:${socket.remotePort}`);
+                Logger.info(`New Client connection from ${socket.remoteAddress}:${socket.remotePort}`);
 
                 // rebuild Godot Object serialisation
                 const rpcClientConnected = {
@@ -56,8 +57,8 @@ export class TestEventServer extends EventEmitter implements Disposable {
                     })
                     .on('close', () => socket.end());
             })
-            .on('close', () => console.log(`close connection`))
-            .on('error', (error) => console.log(`Error: ${error}`));
+            .on('close', () => Logger.info(`close connection`))
+            .on('error', e => Logger.error(e));
         this._server = server;
     }
 
