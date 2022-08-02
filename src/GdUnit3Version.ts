@@ -41,7 +41,7 @@ export class GdUnit3Version {
     }
 }
 
-const MIN_REQUIRED_GDUNIT_VERSION = new GdUnit3Version(2, 2, 3);
+const MIN_REQUIRED_GDUNIT_VERSION = new GdUnit3Version(2, 2, 5);
 
 export async function verifyGdUnit3PluginVersion(): Promise<GdUnit3Version> {
     Logger.info('Scanning GdUnit3 plugin version.');

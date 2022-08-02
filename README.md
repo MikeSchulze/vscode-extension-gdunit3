@@ -6,6 +6,11 @@ This extension provides an inspector to run and debug your GdUnit3 c# tests in V
 
 ## Release Notes
 
+### Version 2.2.5
+ - Fixed Json client/server protokoll by using a dedicated delemiter to send/receive packages
+   [more details](https://github.com/MikeSchulze/gdUnit3/issues/305)
+ - increased the minimum required gdUnit3 plugin to v2.2.5
+
 ### Version 2.2.4
 - Fixed create test was failing on linux systems
 - Improved logging

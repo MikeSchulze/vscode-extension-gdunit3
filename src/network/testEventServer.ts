@@ -10,6 +10,7 @@ import { TestSuite } from '../testSuite';
 
 export class TestEventServer extends EventEmitter implements Disposable {
 
+    readonly JSON_RESPONSE_DELIMITER = '<<JRD>>'
     readonly HOST = 'localhost';
     private _server: Server;
 
@@ -35,7 +36,7 @@ export class TestEventServer extends EventEmitter implements Disposable {
                 socket.write(data);
                 socket
                     .on('data', (buffer) => {
-                        buffer.toString().split("|")
+                        buffer.toString().split(this.JSON_RESPONSE_DELIMITER)
                             .filter(e => e != null && e != '')
                             .forEach(json => {
                                 const rpc = JSON.parse(json);
