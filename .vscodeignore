@@ -5,4 +5,7 @@ docs/**
 package-lock.json
 tsconfig.json
 .vscode/**
+.github/**
 .gitignore
+.mono/**
+workspace**
