@@ -33,8 +33,8 @@ export async function activate(context: ExtensionContext) {
 	await verifyGdUnit3PluginVersion()
 		.then(version => {
 			commands.executeCommand('setContext', 'cmd-gdUnit3:is-ready', true);
-			Logger.appendLine(`GdUnit3 plugin ${version} found.`)
-			Logger.appendLine('GdUnit3 Test Explorer is now active!');
+			Logger.info(`GdUnit3 plugin ${version} found.`)
+			Logger.appendLine(`GdUnit3 Test Explorer v${context.extension.packageJSON.version} is now active!`);
 		})
 		.catch(error => {
 			commands.executeCommand('setContext', 'cmd-gdUnit3:is-ready', false);

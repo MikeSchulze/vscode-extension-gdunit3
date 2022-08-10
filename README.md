@@ -6,6 +6,10 @@ This extension provides an inspector to run and debug your GdUnit3 c# tests in V
 
 ## Release Notes
 
+### Version 2.2.6
+  - Fix build error if the project name contains spaces
+  - Show the extension version number at startup on the console
+
 ### Version 2.2.5
  - Fixed Json client/server protokoll by using a dedicated delemiter to send/receive packages
    [more details](https://github.com/MikeSchulze/gdUnit3/issues/305)

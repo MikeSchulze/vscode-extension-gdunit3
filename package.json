@@ -2,7 +2,7 @@
 	"name": "gdunit3",
 	"displayName": "Godot GdUnit Test Explorer",
 	"description": "Test Explorer for GdUnit3",
-	"version": "2.2.5",
+	"version": "2.2.6",
 	"publisher": "mikeschulze",
 	"license": "MIT",
 	"repository": {
@@ -301,7 +301,7 @@
 		"jsonc-parser": "^3.0.0",
 		"promise-socket": "^6.0.3",
 		"uuid": "^8.3.2",
-		"vscode-debugprotocol": "^1.42.0",
+		"@vscode/debugprotocol": "^1.51.0",
 		"vscode-nls": "^5.0.0"
 	},
 	"devDependencies": {

@@ -143,7 +143,7 @@ export class TestRunner {
     private async buildProject(target: string): Promise<number | null> {
         Logger.info(`Building ... ${target}`);
         const projectFile = await this.findProject();
-        const fullCommand = `dotnet build ${projectFile} -verbosity:m`; // -p:Configuration=${target}
+        const fullCommand = `dotnet build "${projectFile}" -verbosity:m`; // -p:Configuration=${target}
         this._buildProcess = cp.exec(fullCommand, err => Logger.error(err));
         this._buildProcess.stdout?.on('data', stream => Logger.append(`${stream}`));
         this._buildProcess.stderr?.on('data', e => Logger.error(e));
