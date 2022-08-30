@@ -1,5 +1,5 @@
 
-### GdUnit3 a Godot Unit Test Inspector for Visual Studio Code
+### GdUnit3 Explorer a Godot Unit Test Inspector for Visual Studio Code
 
 This extension provides an inspector to run and debug your GdUnit3 c# tests in VS Code. 
 ![Screenshot](resources/vsc-extension.png)
